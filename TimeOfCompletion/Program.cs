@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace TimeOfCompletion
 {
@@ -7,15 +8,30 @@ namespace TimeOfCompletion
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Random rnd = new Random();
+            int[] data = new int[1000000];
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = rnd.Next(100);
+            }
+
+            Stopwatch timer = Stopwatch.StartNew();
+            int[] resultSimple = SimpleStockSpan(data);
+            timer.Stop();
+            Console.WriteLine(timer.Elapsed);
+            timer.Restart();
+            int[] resultStack = StackStockSpan(data);
+            timer.Stop();
+            Console.WriteLine(timer.Elapsed);
         }
 
         static int[] SimpleStockSpan(int[] quotes)
         {
             int[] spans = new int[quotes.Length];
+            int k;
             for (int i = 0; i < quotes.Length; i++)
             {
-                int k = 1;
+                k = 1;
                 bool spanEnd = false;
                 while (i - k >= 0 && !spanEnd)
                 {
@@ -51,7 +67,7 @@ namespace TimeOfCompletion
                 }
                 else
                 {
-                    spans[i] = i - stack.Peek()
+                    spans[i] = i - stack.Peek();
                 }
                 stack.Push(i);
             }
